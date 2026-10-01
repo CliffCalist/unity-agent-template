@@ -35,8 +35,8 @@ Members appear **only in this order**:
 1. Serialized and public fields, excluding constants.
 2. Nonserialized private fields.
 3. Constants (`const`), regardless of accessibility.
-4. Events.
-5. Properties.
+4. Properties.
+5. Events.
 6. Constructor or initialization methods.
 7. Unity lifecycle methods, if the type is a Unity component.
 8. Other methods.
