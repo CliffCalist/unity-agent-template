@@ -1,76 +1,95 @@
-# Unity Project Organization
+# Unity project file organization
 
-This document defines the Unity project structure and naming rules for project-owned assets. The conventions make an asset's owner, location, and type easy to identify.
+This convention defines naming rules for project-owned assets and GameObjects in a Unity project. It also describes the folder structure for assets.
 
-The main principle: keep an asset with the feature that owns it. Use name prefixes to identify asset types instead of separate top-level folders for each type.
+An asset's name identifies its type, owning feature, context, and variant. This helps you understand its purpose without opening it.
 
-Keep project-owned files in `Assets/_Project`. Third-party assets may remain in their imported package folders; do not move or rename them mechanically.
+The folder structure follows the naming scheme: an asset's name indicates where to find it and where to add similar assets. Grouping assets by usage indicates which parts of the project an addition, deletion, or change might affect. This narrows the scope of searches and checks during development.
 
-These rules are a working standard, not a requirement to create every possible folder or name segment. Add structure when it improves navigation and readability.
+## Contents
+
+- [Naming](#naming)
+  - [Asset type prefixes](#asset-type-prefixes)
+  - [UI assets](#ui-assets)
+  - [Models](#models)
+  - [GameObjects in a prefab](#gameobjects-in-a-prefab)
+- [Folder structure](#folder-structure)
+  - [Feature folders](#feature-folders)
+  - [Shared assets](#shared-assets)
 
 ## Naming
 
-### General rules
+Do not use spaces in project-owned filenames or GameObject names. Use `PascalCase` for words and `_` to separate logical name segments.
 
-Project-owned file and GameObject names contain no spaces. Use `PascalCase` for words and `_` to separate logical name segments.
+The [C# convention](unity-csharp-conventions.md) defines naming rules for scripts and types.
 
-An asset name should make sense regardless of its location:
+An asset's name should make sense regardless of its folder. Name model files without a type prefix, as described in [Models](#models). For assets whose types appear in the [prefix table](#asset-type-prefixes), use this scheme:
 
 ```text
 Prefix_Owner[_Context][_Variant]
 ```
 
+Square brackets mark optional segments and are not part of the name.
+
 | Segment | Meaning |
 | --- | --- |
-| `Prefix` | Technical asset type. |
-| `Owner` | Feature or scope that owns the asset. |
-| `Context` | Asset role within its owner; include it when clarification is needed. |
-| `Variant` | Meaningful difference between variants; include it only when needed. |
+| `Prefix` | Asset type |
+| `Owner` | Feature or scope that owns the asset |
+| `Context` | Asset role within its feature or scope |
+| `Variant` | Difference between asset variants |
 
-Do not repeat information already conveyed by the prefix or context. For example, `SO_Player` does not need an additional `Config` segment.
+A consistent naming scheme helps narrow searches by asset type, owner, context, or variant. You can combine segments: for example, `P_Shop_` helps find shop prefabs, while `P_Shop_Item_` narrows the search to prefabs for its list or grid items.
+
+If you need to clarify an asset's role, add `Context`. If you need to distinguish asset variants, add `Variant`.
+
+The context can contain multiple segments separated by `_`. For example, in `P_Shop_Popup_Offer_Christmas`, `Shop` identifies the owner, `Popup_Offer` is the context, and `Christmas` is the variant.
+
+Do not repeat information already conveyed by the prefix or context. For ScriptableObject configuration assets, do not add `Config` merely to identify them as configurations: the `SO_` prefix is sufficient for that purpose. Use `SO_Player` instead of `SO_Player_Config`. Additional context should clarify the asset's purpose, as in `SO_Player_Movement`.
+
+### Asset type prefixes
 
 | Prefix | Type |
 | --- | --- |
 | `P_` | Prefab |
 | `SO_` | ScriptableObject asset |
 | `M_` | Material |
+| `PM_` | Physics material (3D or 2D) |
 | `T_` | Texture or sprite |
 | `SCN_` | Scene |
 | `SFX_` | Sound effect |
 | `BGM_` | Music |
 | `VFX_` | Visual effect |
 | `ANIM_` | Animation clip |
-| `AC_` | Animator controller |
+| `AC_` | Animator Controller or Animator Override Controller |
 
-Add a new prefix only when it is clear and genuinely makes assets easier to find.
+### UI assets
 
-### UI prefabs
+For UI assets, follow the general naming rules for their asset types.
 
-These rules apply to prefabs. UI textures, materials, and ScriptableObject assets follow the general naming rules for their types.
+For basic UI prefabs that do not belong to a specific feature, use `UI` as `Owner`: `P_UI_Control_ButtonPrimary`, `P_UI_Popup_Base`.
 
-Basic reusable UI elements have `UI` as their owner: `P_UI_Control_ButtonPrimary`, `P_UI_Popup_Base`. UI belonging to a specific feature uses that feature as its owner: `P_Shop_Popup_Offer`, `P_Economy_Widget_Wallet`.
+For UI prefabs belonging to a specific feature, use that feature's name as `Owner`: `P_Shop_Popup_Offer`, `P_Economy_Widget_Wallet`.
 
-The first context segment after the owner identifies the UI prefab role:
+After `Owner`, use the prefab's role as the first segment of `Context`:
 
 | Role | Meaning | Example |
 | --- | --- | --- |
 | `Screen` | Full-screen UI state | `P_Shop_Screen_Main` |
 | `Popup` | Modal or semi-modal window | `P_Shop_Popup_ConfirmPurchase` |
 | `Panel` | Large part of a screen or popup | `P_Shop_Panel_ProductDetails` |
-| `Widget` | Small reusable UI block | `P_Economy_Widget_WalletBalance` |
-| `View` | Presentation of a gameplay or model entity | `P_Character_View_Stats` |
-| `Item` | List, grid, or inventory element | `P_Shop_Item_Product` |
+| `Widget` | Small UI block that displays data or provides related controls | `P_Character_Widget_Stats` |
+| `Item` | UI element that represents one entry in a list or grid | `P_Shop_Item_Product` |
 | `Control` | Basic interactive component | `P_UI_Control_ButtonPrimary` |
 
 ### Models
 
-FBX and other model files have no technical prefix. Their names include the owner and meaningful context: `TurkishSauna_Hanger_Bedroom.fbx`, `Services_Bottle.fbx`.
+For FBX and other model files, do not use an asset type prefix. Include the owning feature or scope and the model's role in the name: `Shop_Counter.fbx`, `Character_Backpack.fbx`.
 
-A prefab wrapping a model gets `P_`. Add `Model` to the context when it distinguishes the prefab from others: `P_TurkishSauna_Place_Model`.
+For a prefab containing a model, use the `P_` prefix. If you need to distinguish it from other prefabs, add `Model` to the context: `P_Shop_Counter_Model`.
 
-### Hierarchy
+### GameObjects in a prefab
 
-The root GameObject of a prefab has the same name as the prefab asset. Name child GameObjects by their local role without repeating the owner:
+Give the root GameObject the same name as the prefab asset. Name child GameObjects by their role within the prefab. Do not repeat the feature or scope name:
 
 ```text
 P_Shop_Popup_Offer
@@ -81,11 +100,15 @@ P_Shop_Popup_Offer
   BTN_Close
 ```
 
-Short role prefixes such as `BTN_`, `TXT_`, and `IMG_` are suitable for UI. For gameplay, names such as `Visual`, `Collider`, `SpawnPoint`, and `InteractionArea` are usually enough. Spell out unclear abbreviations.
+For UI objects, you can use short role prefixes such as `BTN_`, `TXT_`, and `IMG_`. For gameplay objects, names such as `Visual`, `Collider`, `SpawnPoint`, and `InteractionArea` are usually enough. If an abbreviation is unclear, spell out the name.
 
-## Project Structure
+## Folder structure
 
-Base structure for project-owned files:
+Keep project-owned assets in `Assets/_Project`. This folder separates them from third-party assets, plugins, and imported packages.
+
+Use `PascalCase` without spaces for folder names. For special folders, use the names specified in this convention: `_Project` and `_Shared`.
+
+Example folder structure:
 
 ```text
 Assets/_Project/
@@ -94,13 +117,21 @@ Assets/_Project/
   Scripts/
 ```
 
-`Features` contains feature-owned assets: prefabs, configuration, art, audio, and VFX. Keep an asset with its single clear owner. Do not collect all feature prefabs, materials, or settings in top-level `Prefabs`, `Materials`, or `Settings` folders.
+| Folder | Purpose |
+| --- | --- |
+| `Features/` | Contains feature folders and their categories |
+| `Scenes/` | Contains project-wide scenes that do not belong to a specific feature |
+| `Scripts/` | Contains centrally organized project code when code is not split into assemblies by feature |
 
-This structure suits projects with enough features and dependencies to benefit from owner-based grouping. A small project may use a simpler structure without empty folder levels.
+Place feature folders in `Features/`. Keep each feature's assets in its folder. You can group related features into categories. For example, in `Features/Characters/Enemies/Zombie/`, `Characters/` and `Enemies/` are categories, while `Zombie/` contains the feature's assets. A category is unnecessary for a single feature.
 
-### Feature Structure
+If a scene belongs to a specific feature, keep it in that feature's `Scenes/` folder. If code is split into assemblies by feature, keep each feature's code in its own `Scripts/` folder.
 
-Example feature structure:
+For small projects, you can use a *type-based* structure instead of a *feature-based* structure. In that case, keep assets in `Prefabs/`, `Materials/`, `Textures/`, and other folders for their types under `Assets/_Project/`.
+
+### Feature folders
+
+Within a feature, group assets by type (*type-based*). Example folder structure:
 
 ```text
 Assets/_Project/Features/
@@ -115,49 +146,38 @@ Assets/_Project/Features/
     Configs/
     Prefabs/
       UI/
+    Scenes/
+    Scripts/
 ```
 
-These are possible folders, not a template to recreate in full. Create folders when they separate existing assets by useful context. One or two configuration assets can remain directly in the feature folder.
+Simplify the hierarchy when nested folders do not help separate assets. You can keep one or two assets in the nearest parent folder: for example, textures directly in `Art/`, or in the feature folder if there are no other asset groups. If `Art/` contains only one asset type, you can name it after that type, such as `Textures/`, without an additional nesting level.
 
-Related features may be grouped under a category, for example `Features/Services/TreatmentRooms/TurkishSauna/`. A category is unnecessary for a single feature.
+Add `Scenes/` and `Scripts/` folders under the conditions described in the introduction to [Folder structure](#folder-structure).
 
-Use `Prefabs/UI/` to separate UI prefabs when the feature also has gameplay prefabs. If all of its prefabs are UI, they may sit directly in `Prefabs/`.
+If a feature has both gameplay and UI prefabs, keep UI prefabs in `Prefabs/UI/`. Preserve this separation when simplifying the hierarchy. If all of the feature's prefabs are UI prefabs, keep them directly in `Prefabs/`.
 
-### Shared Assets
+### Shared assets
 
-`_Shared` contains assets used by multiple features when no single feature clearly owns them:
+Use by multiple features does not necessarily make an asset shared. If an asset belongs to a specific feature, keep it in that feature's folder.
 
-| Usage | Location |
+If multiple features use an asset and none of them owns it, keep the asset in `_Shared/` under their nearest common category. If there is no common category, use `Features/_Shared/`.
+
+| Ownership and usage | Location |
 | --- | --- |
-| One feature | That feature folder |
-| Multiple features in one category | `Features/FeatureCategory/_Shared/` |
-| Multiple independent features | `Features/_Shared/` |
+| An asset belongs to a specific feature | That feature's folder |
+| Features with a common category use an asset without a specific owner | `_Shared/` under the nearest common category |
+| Features without a common category use an asset without a specific owner | `Features/_Shared/` |
 
-For example, decorative models shared by several services may live in `Features/Services/_Shared/Art/Models/`. A reusable prefab without its own logic does not necessarily become a separate feature. If a shared part gains its own logic and responsibility, make it a separate feature.
-
-### Scenes
-
-Keep project scenes in `Assets/_Project/Scenes/` with the `SCN_` prefix: `SCN_Preload.unity`, `SCN_Gameplay.unity`, `SCN_MainMenu.unity`.
-
-A folder for baked scene data may repeat the scene name, for example `Assets/_Project/Scenes/SCN_Gameplay/`. Do not mechanically rename third-party sample scenes.
-
-## Scripts
-
-Recommended separation of scripts by responsibility:
+If weapon models do not belong to a separate weapon feature but are used by both `Zombie` and `Skeleton`, place them in `_Shared/` under their common category, `Enemies/`:
 
 ```text
-Assets/_Project/Scripts/
-  Core/       — gameplay logic and game rules
-  UI/         — state presentation and interaction handling
-  Bootstrap/  — startup and composition
+Assets/_Project/Features/Characters/Enemies/
+  Zombie/
+  Skeleton/
+  _Shared/
+    Models/
 ```
 
-`Core` does not depend on `UI` or control its internal state. `UI` may read `Core` state or subscribe to its events. `Bootstrap` connects these parts when a scene or feature starts.
+Within `_Shared/`, group assets by type and simplify nesting as described in [Feature folders](#feature-folders).
 
-When gameplay needs a user action, `Core` defines a narrow contract named for the domain need. For example, `IRewardSelection` describes reward selection rather than a specific `Popup` or `Window`. UI implements the contract, and Bootstrap supplies that implementation to Core.
-
-### Odin Inspector
-
-If the project uses Odin Inspector, code attributes describe data rules and allowed values, such as `[Required]` and `[MinValue(0)]`.
-
-Configure inspector presentation through Odin Visual Designer: grouping, order, decorative headers, spacing, and colors. Usually, 1–3 meaningful attributes per field are enough; visual settings should not clutter the code.
+In a shared asset's name, use the common scope as `Owner`. For example, a material used by several enemy types might be named `M_Enemies_Dissolve`. For basic UI prefabs, use `Owner = UI` as described in [UI assets](#ui-assets).
