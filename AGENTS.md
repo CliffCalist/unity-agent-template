@@ -3,7 +3,7 @@
 Before starting work, read the convention relevant to the task:
 
 - [Unity Project File Organization](conventions/unity-project-organization.md) covers asset and GameObject naming, feature and shared asset folders, and scene and script placement. Use it when creating, moving, renaming, or organizing these files, folders, or GameObjects.
-- [Unity C# Conventions](conventions/unity-csharp-conventions.md) covers C# naming and structure, the Unity lifecycle, and dependencies between classes. Use it when writing or changing C# scripts.
+- [C# Code Style for Unity](conventions/unity-csharp-conventions.md) covers naming, attribute formatting, member order and semantic grouping, regions, and Unity lifecycle methods. Use this convention when writing or changing C# scripts or organizing their code.
 
 If a task touches both code and its placement or related assets, use both conventions.
 
