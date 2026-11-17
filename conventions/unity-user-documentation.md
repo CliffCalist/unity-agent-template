@@ -2,7 +2,7 @@
 
 ## Purpose and audience
 
-This convention defines how to write documentation for clients, game designers, and other users who work through the Unity Editor and Inspector and do not read code. Documentation should help readers complete tasks, understand system behavior, and choose settings.
+Write for clients, game designers, and other Unity Editor users who do not read code. Help them understand behavior, choose settings, and complete tasks. Use code to establish facts, then explain responsibilities and observable results in familiar language.
 
 ## Contents
 
@@ -16,6 +16,7 @@ This convention defines how to write documentation for clients, game designers, 
   - [Primary location](#primary-location)
   - [Navigation](#navigation)
 - [Writing and formatting](#writing-and-formatting)
+- [Selecting information](#selecting-information)
 - [Describing the system and Inspector](#describing-the-system-and-inspector)
   - [Operating principles](#operating-principles)
   - [Access and labels](#access-and-labels)
@@ -29,43 +30,37 @@ This convention defines how to write documentation for clients, game designers, 
 
 ## Documentation types
 
-Use two documentation types: manuals and system references. Choose materials based on reader needs and the agreed documentation scope. Not every system needs both types.
+Use manuals and system references according to reader needs and the agreed scope. Not every system needs both.
 
 ### Manual
 
-A manual helps readers achieve a specific result through a sequence of actions. It can introduce a system or address a work task.
-
-Start by identifying the task, required knowledge, and initial conditions. Then describe the steps and explain how to verify the result.
-
-For an introduction, provide a prepared path that requires minimal prior knowledge and leads to a predictable result. For a work task, build on the stated prerequisites and describe the actions needed for that task. Briefly explain the reason for an action when it helps the reader perform it.
+A manual helps readers achieve a specific result. State the task, prerequisites, and initial conditions, then describe the steps and how to verify the result. Explain reasons where they help readers act or choose between alternatives.
 
 ### System reference
 
-A system reference helps readers understand how a system works and find information about its settings and available actions.
-
-Organize the material so readers can both work through the topic to understand it and quickly find a specific element.
-
-Explain the effects of settings and the conditions for using them. Descriptions should help readers make decisions rather than merely repeat Inspector labels or tooltips.
+A system reference explains how a system works and what its settings and actions do. Introduce the necessary concepts and make individual elements easy to find. Support both a first reading and looking up one field.
 
 ## Organizing materials
 
 ### Topic scope
 
-Define which system or task the document covers. If an asset contains settings for several systems, the document does not need to describe all of them.
+Define the system or task the document covers. Keep explanations within that scope: sharing a GameObject, prefab, or Inspector does not by itself make separate components one documentation topic.
 
-Write manuals and system references as separate documents. If both types are needed, link them to each other. Each type can include several documents for individual topics or tasks.
+Use heading levels to distinguish the system, its subsystems, and explanations within a subsystem. Keep subsystems with comparable responsibilities at the same level. Group related subsystems so their relationship is apparent.
+
+Keep manuals and references in separate documents and link related materials. Split them by topic or task when useful.
 
 ### Getting started
 
-If several manuals require the same preparation, create a shared getting-started manual. Describe the location and purpose of the required assets and the basic actions needed to prepare for working with the system.
-
-In other manuals, list this material as a prerequisite and link to it instead of repeating the preparation steps.
+Put preparation shared by several manuals in a getting-started manual: required assets, their purpose, and setup actions. Link to it as a prerequisite instead of repeating the steps.
 
 ### Primary location
 
-Describe each topic in detail in one primary location. Place the full description of a setting in the system reference and the sequence for completing a task in a manual.
+Describe each topic in detail in one primary location. Explain a setting in the reference for the system whose behavior it controls. Describe the workflow for supplying, copying, or applying its value where that workflow belongs. These may be different documents.
 
-Elsewhere, provide the context needed for the current task and link to the primary description. Manuals can include brief explanations, and system references can include usage examples.
+Do not replace a system's field descriptions with links solely because another asset supplies the values. Where several components expose the same setting, choose one primary description and provide enough context with links elsewhere.
+
+Explain shared principles once and field-specific behavior alongside the field. Elsewhere, provide brief context and links. Manuals may include explanations, and references may include usage examples.
 
 ### Navigation
 
@@ -75,59 +70,81 @@ Use Markdown with relative file and image links. Follow the project's documentat
 
 ## Writing and formatting
 
-For language, tone, and formatting, use the [Google developer documentation style guide](https://developers.google.com/style). Start with the [highlights](https://developers.google.com/style/highlights) and consult the full guide for specific questions.
-
-Apply the general guidance to the audience and language of the document. Do not adopt Google product-specific rules.
+Use the [Google developer documentation style guide](https://developers.google.com/style), starting with its [highlights](https://developers.google.com/style/highlights). Adapt general guidance to the audience and language; omit Google product-specific rules.
 
 Explicit user instructions and local project requirements take precedence over the guide. If explicitly approved examples exist for the relevant document type, use them. Existing documentation is not automatically an approved template.
+
+Say what the system does and what the reader will observe. Split sentences with several conditions, effects, or exceptions. Use lists to make separate responsibilities or conditions apparent.
+
+Introduce terms before relying on them. Avoid explaining unfamiliar concepts through other unfamiliar terms or field names.
+
+## Selecting information
+
+Include information that helps readers understand behavior, choose a value, act, or diagnose a relevant problem. Remove repetition and irrelevant detail while preserving the causal links needed for understanding.
+
+Include implementation details only when they affect expectations or decisions. Translate calculations into behavior: for example, describe the range over which an effect activates rather than an internal eligibility coefficient.
+
+State limitations and exceptions where omitting them would create a misleading expectation or a likely mistake. Avoid accumulating statements about everything a setting does not affect.
+
+Assume the Unity basics stated in the prerequisites. Explain them at the point of need for introductory tasks, without repeating them throughout references.
+
+Simplify while preserving conditions and scope. A target, estimate, or partial effect must not become a guarantee. Prefer a concise qualification to a long account of the algorithm.
 
 ## Describing the system and Inspector
 
 ### Operating principles
 
-If choosing settings requires an understanding of a shared operating principle, explain it before describing the relevant system or group. Readers should not have to reconstruct this explanation from individual field descriptions.
+Start with the system's responsibility. For a subsystem, briefly explain what it contributes and how it relates to other systems when that relationship matters.
 
-Include implementation details only when they help readers use the system or choose settings.
+Explain shared principles before the fields that depend on them. Use a diagram where it clarifies the relationship. Readers should not have to reconstruct a principle from table rows or understand controls not yet introduced.
+
+Adapt this order to the topic; a simple feature may need only a short explanation and its settings.
 
 ### Access and labels
 
-Explain which object or asset to select and which component or section to open. If these actions are already described in material listed as a prerequisite, link to it.
+Identify the object or asset and component the reader needs. Keep access instructions brief; link to shared preparation instead of repeating it.
 
 Keep field, group, option, button, and other element labels exactly as displayed in Unity, including in translated documents.
 
 ### Grouping and coverage
 
-Group descriptions to match Inspector groups and nesting, regardless of where values are stored. Cover every editable setting and user action within the stated topic scope, including inherited and nested elements and those added by a custom Inspector. If the primary description is already in another document, link to it.
+Within the agreed scope, cover editable settings and available actions, including inherited and nested elements and custom Inspector controls. Follow recognizable Inspector groups and labels, while placing conceptual explanations where readers need them.
 
-Describe generated, hidden, or read-only data when it helps readers use the system.
+Describe read-only indicators when they help readers interpret the system, and identify them as read-only. Include hidden or generated data only when readers need it for the documented task or decision.
 
 ### Fields and values
 
-Explain each field's purpose and the effect of changing it. Depending on the field type, describe what happens when the reader increases or decreases a value, selects an option, or assigns a reference.
+Begin with what the field controls. Explain the behavior that helps the reader choose its value, option, or reference.
 
-For numeric settings, state the units or explain the scale when needed to understand the value. Include limits and dependencies that matter when choosing settings. Distinguish examples from defaults and current asset values.
+Explain increases or decreases when they add information beyond the definition. Avoid filler such as saying a higher minimum requires a higher value. State useful consequences for behavior.
+
+State units or scale and relevant limits. Explain behavior below, across, and beyond thresholds or transition ranges. Include dependencies that affect choices or results. For curves, identify both axes and the effect of changing the output.
+
+Use numeric examples when they clarify a relationship. Distinguish them from defaults and current asset values.
 
 ### Buttons and other elements
 
-For each button, explain the action it performs and the result the reader will get. State required prerequisites, availability conditions, and significant consequences, such as replacing previously created data.
+For a button, explain the action and result, its required inputs, and any availability conditions or significant consequences, such as replacing existing data.
 
-For lists and other composite elements, describe the available operations and the significance of element order if it affects behavior. For indicators and information panels, explain how to interpret the displayed state and whether the reader needs to act.
+For lists, describe operations and any effect of element order. For indicators, explain the state and whether action is needed.
 
 ### Storing and applying changes
 
-Identify where to edit values and which objects a change affects. In particular, distinguish instance settings from settings in a shared configuration asset. If a value is stored in another component or asset, identify it.
+Explain storage and application when readers need that information to make a change take effect or understand its scope. Distinguish instance settings from shared assets where this affects other objects.
 
-State any required apply, rebuild, or restart actions. Explain relevant Play Mode behavior, including whether changes persist after leaving Play Mode.
+State required apply, rebuild, or restart actions at the point of need. Explain copying or overwriting behavior in the relevant workflow and link to it when necessary. Avoid repeating the same persistence or application instructions across field descriptions.
 
 ### Tables
 
-Use compact tables for elements of the same kind. Group them to match the Inspector. Describe nested groups in separate tables when needed, and link to them from the parent group.
+Use tables when related fields or states benefit from scanning and comparison. A button with one parameter may be clearer in paragraphs. Inspector elements do not automatically require a table.
 
-Use columns for the element label and description. Include units, limits, and other information in the description or in separate columns when this makes comparison easier. Do not create columns that duplicate information or are unnecessary for the elements being described.
+Usually use an element label and description. Add columns only when they help comparison. Group rows by the relevant Inspector groups; split a table when distinct groups or long explanations make it difficult to use.
 
 ## Examples and illustrations
 
-Add examples, screenshots, or diagrams when they help explain an action, relationship, or result. Use concrete examples or diagrams for spatial settings. In spatial comparisons, state the viewpoint. When comparing the effects of a setting, explain what changes and which conditions remain fixed.
+Use examples, screenshots, or diagrams when they explain a relationship more clearly than text alone, especially for spatial settings. Place them alongside the relevant explanation and identify the viewpoint, labels, or colors needed to read them.
+
+Let text and illustrations complement each other without repeating the explanation in captions. Mark illustrative values or proportions if they could be mistaken for measurements. In comparisons, identify what changes and what stays fixed.
 
 Before creating a new illustration, check whether an existing one can be reused. Make sure images and captions match the behavior being described.
 
@@ -135,6 +152,11 @@ Before creating a new illustration, check whether an existing one can be reused.
 
 Before writing, check behavior against current code, Inspector presentation, and relevant assets. Keep investigation notes separate from user documentation.
 
-Check the prerequisites, steps, and expected results of manuals. In system references, check coverage within the stated scope, element labels, units, and behavior. For all documents, check links and illustrations and, when possible, preview the rendered Markdown.
+Review factual accuracy and reader understanding separately:
+
+- **Accuracy:** verify behavior, labels, units, limits, and dependencies. Check reference coverage or manual prerequisites, steps, and expected results. Ensure simplifications preserve conditions and scope.
+- **Understanding:** read in order with the audience's prerequisites. Check clear responsibilities, terms before use, practical field descriptions, and a reason for each detail. Remove repetition, obvious filler, unnecessary cross-references, and sentences that require rereading.
+
+Check links and illustrations and, when possible, preview the rendered Markdown. A correct list of fields or a successful link check does not establish that the explanation is understandable.
 
 If you cannot confirm a label, unit, or behavior, do not present an assumption as fact. Report uncertainty and verification limits in the work summary. Source inspection alone does not establish visual quality or gameplay feel; these require observation in Unity.
